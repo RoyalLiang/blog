@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>
+{% load staticfiles %}
+<html>
+	<head>
+		<title>{% block title %}首页{% endblock %}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+		<noscript><link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+
+			<div id="wrapper" class="fade-in">
+                {% block header %}
+				<!-- Intro -->
+					<div id="intro">
+						<h1>嗨,你好<br />
+						陌生人</h1>
+						<p>这里是Royal_Liang的主页</p>
+						<ul class="actions">
+							<li><a href="#header" class="button icon solo fa-arrow-down scrolly"></a></li>
+						</ul>
+					</div>
+                {% endblock %}
+
+				<!-- Header -->
+					<header id="header">
+						<a href="{% url 'blog:share' %}" class="logo">分享本站</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+                            {% block links %}
+							<li class="{% ifequal links 'index' %}active{% endifequal %}"><a href="{% url 'index' %}">首页</a></li>
+							<li class="{% ifequal links 'python' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='python' %}">Python</a></li>
+							<li class="{% ifequal links 'front' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='front' %}">前端</a></li>
+                            <li class="{% ifequal links 'database' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='database' %}">数据库</a></li>
+                            <li class="{% ifequal links 'zaji' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='zaji' %}">杂记</a></li>
+                            <li class="{% ifequal links 'aboutme' %}active{% endifequal %}"><a href="{% url 'blog:aboutme' %}">关于我</a></li>
+                            <li class="{% ifequal links 'read' %}active{% endifequal %}"><a href=".">阅读页</a></li>
+                            {% endblock %}
+						</ul>
+                        {% block bread %}
+						<ul class="icons">
+                            <li>当前位置:首页</li>
+						</ul>
+                        {% endblock %}
+					</nav>
+                    {% block body %}
+
+				<!-- Main -->
+					<div id="main">
+                    {% block list %}
+						<!-- Featured Post -->
+                            {% for article in articles %}
+							<article class="post featured">
+								<header class="major">
+									<span class="date">
+                                        <time datetime="{{ article.add_time }}">
+                                            {{ article.add_time|date:"Y.m.d   h:m" }}
+                                        </time>
+                                    </span>
+
+									<h2><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}">{{ article.title }}</a></h2>
+                                    <p>所属分类:{{ article.article_label }}</p>
+
+{#									<p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />#}
+{#									facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />#}
+{#									amet nullam sed etiam veroeros.</p>#}
+								</header>
+								<a href="#" class="image main"><img src="{% static 'images/pic01.jpg' %}" alt="" /></a>
+								<ul class="actions special">
+									<li><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="button large">
+                                        继续阅读
+                                    </a></li>
+								</ul>
+							</article>
+                        {% endfor %}
+                    {% endblock %}
+                    {% block all %}
+						<!-- Posts -->
+							<section class="posts">
+                                {% for article in all_articles.object_list %}
+								    <article>
+									<header>
+										<span class="date">
+                                            <h2><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}">{{ article.title }}</a></h2>
+                                            <time datetime="{{ article.add_time }}">
+                                            {{ article.add_time|date:"Y.m.d   h:m" }}
+                                            </time>
+                                            <br>
+                                            所属分类:{{ article.article_label }}
+                                        </span>
+
+									</header>
+									<a href="#" class="image fit"><img src="{% static 'images/pic02.jpg' %}" alt="" /></a>
+									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
+									<ul class="actions special">
+										<li><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="button">继续阅读</a></li>
+									</ul>
+								</article>
+								{% endfor %}
+							</section>
+                    {% endblock %}
+
+						<!-- Footer -->
+							<footer>
+								<div class="pagination">
+                                    {% if all_articles.has_previous %}
+                                        <li class="long"><a href="?{{ all_articles.previous_page_number.querystring }}">上一页</a></li>
+                                    {% endif %}
+
+                                    {% for page in all_articles.pages %}
+                                        {% if page %}
+                                            {% ifequal page all_articles.number %}
+                                                <a href="?{{ page.querystring }}" class="page active">{{ page }}</a>
+                                            {% else %}
+                                                <a href="?{{ page.querystring }}" class="page">{{ page }}</a>
+                                            {% endifequal %}
+                                        {% else %}
+                                            <a href="" class="none">...</a>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if all_articles.has_next %}
+                                        <a href="?{{ all_articles.next_page_number.querystring }}" class="long">下一页</a>
+                                    {% endif %}
+								</div>
+							</footer>
+
+					</div>
+                    {% endblock %}
+
+
+				<!-- Footer -->
+                {% block footer %}
+					<footer id="footer">
+						<section>
+							<form method="post" action="#">
+								<div class="fields">
+									<div class="field">
+										<label for="name">Name</label>
+										<input type="text" name="name" id="name" />
+									</div>
+									<div class="field">
+										<label for="email">Email</label>
+										<input type="text" name="email" id="email" />
+									</div>
+									<div class="field">
+										<label for="message">Message</label>
+										<textarea name="message" id="message" rows="3"></textarea>
+									</div>
+								</div>
+								<ul class="actions">
+									<li><input type="submit" value="Send Message" /></li>
+								</ul>
+							</form>
+						</section>
+						<section class="split contact">
+							<section class="alt">
+								<h3>Address</h3>
+								<p>1234 Somewhere Road #87257<br />
+								Nashville, TN 00000-0000</p>
+							</section>
+							<section>
+								<h3>Phone</h3>
+								<p><a href="#">(000) 000-0000</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">info@untitled.tld</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
+									<li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
+									<li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
+									<li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
+
+								</ul>
+							</section>
+						</section>
+					</footer>
+                {% endblock %}
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>&copy; 人走茶未凉</li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="{% static 'js/jquery.min.js' %}"></script>
+			<script src="{% static 'js/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'js/jquery.scrolly.min.js' %}"></script>
+			<script src="{% static 'js/browser.min.js' %}"></script>
+			<script src="{% static 'js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'js/util.js' %}"></script>
+			<script src="{% static 'js/main.js' %}"></script>
+
+	</body>
+</html>

@@ -1,0 +1,107 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block title %}阅读页{% endblock %}
+{% block header %}
+{% endblock %}
+{% block bread %}
+    <ul class="icons">
+        <li>
+            当前位置:
+            {% ifequal kind 'index' %}<a href="{% url 'index' %}">首页</a>{% endifequal %}
+            {% ifequal kind 'python' %}<a href="{% url 'blog:article_label' label='python' %}">Python</a>{% endifequal %}
+            {% ifequal kind 'front' %}<a href="{% url 'blog:article_label' label='front' %}">前端</a>{% endifequal %}
+            {% ifequal kind 'database' %}<a href="{% url 'blog:article_label' label='database' %}">数据库</a>{% endifequal %}
+            {% ifequal kind 'zaji' %}<a href="{% url 'blog:article_label' label='zaji' %}">杂记</a>{% endifequal %}
+            >
+            {{ article }}
+        </li>
+    </ul>
+{% endblock %}
+{% block body %}
+        <footer id="wrapper">
+
+    <!-- Main -->
+        <div id="main">
+        <!-- Post -->
+            <section class="post">
+                <header class="major">
+                    <span class="date">
+                         <time datetime="{{ article.add_time }}">
+                            {{ article.add_time|date:"Y.m.d   h:m" }}
+                        </time>
+                    </span>
+                    <h3>{{ article.title }}</h3>
+                    <p>浏览量:{{ article.click_nums }},作者:{{ article.article_author }}</p>
+                </header>
+                <div class="image main"><img src="images/pic01.jpg" alt="" /></div>
+                <p>{{ article.content }}</p>
+            </section>
+
+            <section>
+                <h4>留言评论:{{ comment_nums }}</h4>
+
+                {% for comment in comments %}
+                    <h5>{{ comment.name }}:</h5>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{ comment.message }}
+                {% endfor %}
+            </section>
+        </div>
+</footer>
+
+{% endblock %}
+{% block footer %}
+    <footer id="footer">
+        <section>
+            <form method="post" action="{% url 'blog:article_detail' kind=kind article_id=article.id %}">
+                {% csrf_token %}
+                <div class="fields">
+                    <div class="field">
+                        <label for="name">昵称{% if msg.errors %}{{ msg.errors.name }}{% endif %}</label>
+                        <input type="text" name="name" id="name" />
+
+                    </div>
+                    <div class="field">
+                        <label for="email">邮箱{% if msg.errors %}{{ msg.errors.email }}{% endif %}</label>
+                        <input type="text" name="email" id="email" />
+
+                    </div>
+                    <div class="field">
+                        <label for="message">内容{% if msg.errors %}{{ msg.errors.message }}{% endif %}</label>
+                        <textarea name="message" id="message" rows="3" placeholder="发布你的评论">
+
+                        </textarea>
+
+
+                    </div>
+                </div>
+                <ul class="actions">
+                    <li><input type="submit" value="评论" /></li>
+                </ul>
+            </form>
+        </section>
+        <section class="split contact">
+            <section class="alt">
+                <h3>Address</h3>
+                <p>1234 Somewhere Road #87257<br />
+                Nashville, TN 00000-0000</p>
+            </section>
+            <section>
+                <h3>Phone</h3>
+                <p><a href="#">(000) 000-0000</a></p>
+            </section>
+            <section>
+                <h3>Email</h3>
+                <p><a href="#">info@untitled.tld</a></p>
+            </section>
+            <section>
+                <h3>Social</h3>
+                <ul class="icons alt">
+                    <li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
+                    <li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
+                    <li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
+                    <li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
+                </ul>
+            </section>
+        </section>
+    </footer>
+{% endblock %}
