@@ -6,5 +6,6 @@ urlpatterns = [
     re_path(r'^article_label/(?P<label>.*)/$', ArticleLabel.as_view(), name='article_label'),
     path('share/', ShareView.as_view(), name='share'),
     path('aboutme/', AboutMeView.as_view(), name='aboutme'),
+    path('add_comment/', AddCommentView.as_view(), name='add_comment')
 
 ]
