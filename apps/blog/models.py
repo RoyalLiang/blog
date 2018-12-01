@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from mdeditor.fields import MDTextField
 # Create your models here.
 
 
@@ -20,8 +21,9 @@ class Label(models.Model):
 class Article(models.Model):
     article_author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='作者', null=True, blank=True)
     article_label = models.ForeignKey(Label, on_delete=models.CASCADE, verbose_name='文章类别')
+    image = models.ImageField(upload_to='article/%Y/%m', verbose_name='文章配图', null=True)
     title = models.CharField(max_length=32, verbose_name='标题')
-    content = models.TextField(verbose_name='内容')
+    content = MDTextField(verbose_name='内容')
     click_nums = models.IntegerField(default=0, verbose_name='浏览量')
     add_time = models.DateTimeField(default=datetime.now, verbose_name="发表时间")
 

@@ -5,6 +5,7 @@ from .models import *
 from pure_pagination import PageNotAnInteger, Paginator
 from .forms import CommentForm, ShareForm
 from .send_mail import send_email
+import markdown
 
 
 # Create your views here.
@@ -35,6 +36,12 @@ class ArticleView(View):
     def get(self, request, article_id, kind):
         links = 'read'
         article = Article.objects.get(pk=article_id)
+        article.content = markdown.markdown(article.content, extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.toc',
+        ])
+        # context = {'article': article}
         all_comments = article.comment_set.all()
         comment_nums = all_comments.count()
         article.click_nums += 1
@@ -84,7 +91,9 @@ class ShareView(View):
             send_email(email, name, message)
             return render(request, 'send-success.html', {})
         else:
-            return render(request, 'index.html', {})
+            return render(request, 'share.html', {
+                'share_form': share_form,
+            })
 
 
 class ArticleLabel(View):

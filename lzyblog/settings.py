@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'blog',
     'xadmin',
     'crispy_forms',
-    'pure_pagination'
+    'pure_pagination',
+    'mdeditor',
 
 ]
 
@@ -73,6 +74,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 配置上下文管理器
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -143,4 +146,7 @@ EMAIL_HOST_USER = '1302982067@qq.com'
 EMAIL_HOST_PASSWORD = "mjgoiisdmsgpjcac"
 EMAIL_USE_TLS = True
 EMAIL_FROM = '1302982067@qq.com'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

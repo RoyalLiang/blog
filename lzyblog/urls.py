@@ -14,14 +14,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from django.views.generic import TemplateView
+from django.urls import path, include, re_path
+from django.views.static import serve
 from blog.views import IndexView
 import xadmin
-
+from .settings import MEDIA_ROOT
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     path('', IndexView.as_view(), name='index'),
     path('blog/', include('blog.urls', namespace='blog')),
+    # 配置上传文件处理函数
+    re_path('media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
+    path('mdeditor/', include('mdeditor.urls')),
 ]
+
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

@@ -71,7 +71,7 @@
 {#									facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />#}
 {#									amet nullam sed etiam veroeros.</p>#}
 								</header>
-								<a href="#" class="image main"><img src="{% static 'images/pic01.jpg' %}" alt="" /></a>
+								<a href="#" class="image main"><img src="{{ MEDIA_URL }}{{ article.image }}" alt="" /></a>
 								<ul class="actions special">
 									<li><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="button large">
                                         继续阅读
@@ -96,8 +96,8 @@
                                         </span>
 
 									</header>
-									<a href="#" class="image fit"><img src="{% static 'images/pic02.jpg' %}" alt="" /></a>
-									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>
+									<a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="image fit"><img src="{{ MEDIA_URL }}{{ article.image }}" alt="" /></a>
+{#									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>#}
 									<ul class="actions special">
 										<li><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="button">继续阅读</a></li>
 									</ul>
@@ -137,54 +137,54 @@
 
 				<!-- Footer -->
                 {% block footer %}
-					<footer id="footer">
-						<section>
-							<form method="post" action="#">
-								<div class="fields">
-									<div class="field">
-										<label for="name">Name</label>
-										<input type="text" name="name" id="name" />
-									</div>
-									<div class="field">
-										<label for="email">Email</label>
-										<input type="text" name="email" id="email" />
-									</div>
-									<div class="field">
-										<label for="message">Message</label>
-										<textarea name="message" id="message" rows="3"></textarea>
-									</div>
-								</div>
-								<ul class="actions">
-									<li><input type="submit" value="Send Message" /></li>
-								</ul>
-							</form>
-						</section>
-						<section class="split contact">
-							<section class="alt">
-								<h3>Address</h3>
-								<p>1234 Somewhere Road #87257<br />
-								Nashville, TN 00000-0000</p>
-							</section>
-							<section>
-								<h3>Phone</h3>
-								<p><a href="#">(000) 000-0000</a></p>
-							</section>
-							<section>
-								<h3>Email</h3>
-								<p><a href="#">info@untitled.tld</a></p>
-							</section>
-							<section>
-								<h3>Social</h3>
-								<ul class="icons alt">
-									<li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
-									<li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>
-
-								</ul>
-							</section>
-						</section>
-					</footer>
+{#					<footer id="footer">#}
+{#						<section>#}
+{#							<form method="post" action="#">#}
+{#								<div class="fields">#}
+{#									<div class="field">#}
+{#										<label for="name">Name</label>#}
+{#										<input type="text" name="name" id="name" />#}
+{#									</div>#}
+{#									<div class="field">#}
+{#										<label for="email">Email</label>#}
+{#										<input type="text" name="email" id="email" />#}
+{#									</div>#}
+{#									<div class="field">#}
+{#										<label for="message">Message</label>#}
+{#										<textarea name="message" id="message" rows="3"></textarea>#}
+{#									</div>#}
+{#								</div>#}
+{#								<ul class="actions">#}
+{#									<li><input type="submit" value="Send Message" /></li>#}
+{#								</ul>#}
+{#							</form>#}
+{#						</section>#}
+{#						<section class="split contact">#}
+{#							<section class="alt">#}
+{#								<h3>Address</h3>#}
+{#								<p>1234 Somewhere Road #87257<br />#}
+{#								Nashville, TN 00000-0000</p>#}
+{#							</section>#}
+{#							<section>#}
+{#								<h3>Phone</h3>#}
+{#								<p><a href="#">(000) 000-0000</a></p>#}
+{#							</section>#}
+{#							<section>#}
+{#								<h3>Email</h3>#}
+{#								<p><a href="#">info@untitled.tld</a></p>#}
+{#							</section>#}
+{#							<section>#}
+{#								<h3>Social</h3>#}
+{#								<ul class="icons alt">#}
+{#									<li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>#}
+{#									<li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>#}
+{#									<li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>#}
+{#									<li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>#}
+{##}
+{#								</ul>#}
+{#							</section>#}
+{#						</section>#}
+{#					</footer>#}
                 {% endblock %}
 
 				<!-- Copyright -->
