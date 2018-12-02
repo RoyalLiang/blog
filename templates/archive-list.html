@@ -1,0 +1,48 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block title %}归档{% endblock %}
+{% block header %}
+{% endblock %}
+{% block bread %}
+    <ul class="icons">
+        <li>当前位置:归档</li>
+    </ul>
+{% endblock %}
+{% block list %}
+
+    <article class="post featured">
+        <header class="major">
+            <span class="date">目 录</span>
+        {% regroup all_article by add_time.year as article_by_year %}
+
+                {% for year in article_by_year %}
+                <!-- month 是一组月份列表 -->
+
+                    <h2 style="color: orange;">{{ year.grouper }} 年</h2>
+                    <!-- grouper 是组头，即某个月份列表的年份 -->
+
+                    {% regroup year.list by add_time.month as month_post_group %}
+                        {% for month in month_post_group %}
+                            {% regroup month.list by add_time.day as article_day_group %}
+                            {% for day in article_day_group %}
+                        <!-- 再循环显示该年份组下的月份列表即可 -->
+
+                            <h3 style="color: #b2e567;">{{ month.grouper }} 月{{ day.grouper }}</h3>
+
+                                {% for article in day.list %}
+                                <h3>
+                                    <a href="{% url 'blog:article_detail' kind='python' article_id=article.id %}">{{ article.title }}</a>
+                                </h3>
+                                    {% endfor %}
+                        {% endfor %}
+                        {% endfor %}
+                {% endfor %}
+
+        </header>
+    </article>
+
+{% endblock %}
+{% block all %}
+{% endblock %}
+{% block footer %}
+{% endblock %}

@@ -3,6 +3,7 @@
 {% block title %}阅读页{% endblock %}
 {% block header %}
 {% endblock %}
+{#{% block custom_css#}
 {% block bread %}
     <ul class="icons">
         <li>
@@ -31,11 +32,12 @@
                         </time>
                     </span>
                     <h3>{{ article.title }}</h3>
-                    <p>浏览量:{{ article.click_nums }},作者:{{ article.article_author }}</p>
+                    <p>{{ article.click_nums }}阅读,作者:{{ article.article_author }}</p>
 {#                    <a href="#" class="image fit"><img src="{{ MEDIA_URL }}{{ article.image }}" alt="" /></a>#}
                 </header>
 {#                <div class="image main"><img src="{% static 'images/pic01.jpg' %}" alt="" /></div>#}
                 <p>{{ article.content|safe }}</p>
+
             </section>
 
             <section>

@@ -1,11 +1,13 @@
 <!DOCTYPE HTML>
 {% load staticfiles %}
+{#{% block custom_css %}{% endblock %}#}
 <html>
 	<head>
 		<title>{% block title %}首页{% endblock %}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/code.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/main.css' %}" />
 		<noscript><link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
 	</head>
 	<body class="is-preload">
@@ -35,12 +37,14 @@
 						<ul class="links">
                             {% block links %}
 							<li class="{% ifequal links 'index' %}active{% endifequal %}"><a href="{% url 'index' %}">首页</a></li>
-							<li class="{% ifequal links 'python' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='python' %}">Python</a></li>
-							<li class="{% ifequal links 'front' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='front' %}">前端</a></li>
-                            <li class="{% ifequal links 'database' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='database' %}">数据库</a></li>
-                            <li class="{% ifequal links 'zaji' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='zaji' %}">杂记</a></li>
+                            <li class="{% ifequal links 'label' %}active{% endifequal %}"><a href="{% url 'blog:label' %}">分类</a></li>
+                            <li class="{% ifequal links 'archive' %}active{% endifequal %}"><a href="{% url 'blog:archive' %}">归档</a></li>
+{#							<li class="{% ifequal links 'python' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='python' %}">Python</a></li>#}
+{#							<li class="{% ifequal links 'front' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='front' %}">前端</a></li>#}
+{#                            <li class="{% ifequal links 'database' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='database' %}">数据库</a></li>#}
+{#                            <li class="{% ifequal links 'zaji' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='zaji' %}">杂记</a></li>#}
                             <li class="{% ifequal links 'aboutme' %}active{% endifequal %}"><a href="{% url 'blog:aboutme' %}">关于我</a></li>
-                            <li class="{% ifequal links 'read' %}active{% endifequal %}"><a href=".">阅读页</a></li>
+                            <li class="{% ifequal links 'read' %}active{% endifequal %}"><a>阅读页</a></li>
                             {% endblock %}
 						</ul>
                         {% block bread %}
@@ -62,14 +66,14 @@
                                         <time datetime="{{ article.add_time }}">
                                             {{ article.add_time|date:"Y.m.d   h:m" }}
                                         </time>
+                                        <br>{{ article.click_nums }}浏览&nbsp;·&nbsp;{{ article.comment_set.all.count }}评论
                                     </span>
 
 									<h2><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}">{{ article.title }}</a></h2>
-                                    <p>所属分类:{{ article.article_label }}</p>
+{#                                    <p>所属分类:{{ article.article_label }}</p>#}
 
-{#									<p>Aenean ornare velit lacus varius enim ullamcorper proin aliquam<br />#}
-{#									facilisis ante sed etiam magna interdum congue. Lorem ipsum dolor<br />#}
-{#									amet nullam sed etiam veroeros.</p>#}
+
+									<p>{{ article.excerpt }}</p>
 								</header>
 								<a href="#" class="image main"><img src="{{ MEDIA_URL }}{{ article.image }}" alt="" /></a>
 								<ul class="actions special">
@@ -90,14 +94,15 @@
                                             <h2><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}">{{ article.title }}</a></h2>
                                             <time datetime="{{ article.add_time }}">
                                             {{ article.add_time|date:"Y.m.d   h:m" }}
+{#                                                ·<img src="{% static 'images/eyes.png' %}">#}
                                             </time>
-                                            <br>
-                                            所属分类:{{ article.article_label }}
+                                            &nbsp;·&nbsp;{{ article.click_nums }}浏览&nbsp;·&nbsp;{{ article.comment_set.all.count }}评论
+{#                                            所属分类:{{ article.article_label }}#}
                                         </span>
 
 									</header>
 									<a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="image fit"><img src="{{ MEDIA_URL }}{{ article.image }}" alt="" /></a>
-{#									<p>Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis dolor imperdiet dolor mattis sagittis magna etiam.</p>#}
+									<p>{{ article.excerpt }}</p>
 									<ul class="actions special">
 										<li><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="button">继续阅读</a></li>
 									</ul>

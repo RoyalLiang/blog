@@ -40,12 +40,10 @@ class ArticleView(View):
             'markdown.extensions.extra',
             'markdown.extensions.codehilite',
             'markdown.extensions.toc',
-        ])
-        # context = {'article': article}
+        ], safe_mode=True,enable_attributes=False)
         all_comments = article.comment_set.all()
         comment_nums = all_comments.count()
-        article.click_nums += 1
-        article.save()
+        article.increase_click_nums()
         return render(request, 'articledetail.html', {
             'article': article,
             'all_comments': all_comments,
@@ -96,7 +94,17 @@ class ShareView(View):
             })
 
 
-class ArticleLabel(View):
+class LabelView(View):
+    def get(self, request):
+        links = 'label'
+        all_label = Label.objects.all()
+        return render(request, 'article-label.html', {
+            'all_label': all_label,
+            'links': links,
+        })
+
+
+class ArticleLabelView(View):
     def get(self, request, label):
         # python视图
         if label == 'python':
@@ -107,7 +115,7 @@ class ArticleLabel(View):
                 'links': links,
             })
         # 前端视图
-        elif label == 'front':
+        elif label == '前端':
             links = 'front'
             all_article = Article.objects.filter(article_label_id=2)
             return render(request, 'qianduan-list.html', {
@@ -116,7 +124,7 @@ class ArticleLabel(View):
 
             })
         # 数据库视图
-        elif label == 'database':
+        elif label == '数据库':
             links = 'database'
             all_article = Article.objects.filter(article_label_id=3)
             return render(request, 'database-list.html', {
@@ -125,7 +133,7 @@ class ArticleLabel(View):
 
             })
         # 杂记视图
-        elif label == 'zaji':
+        elif label == '杂记':
             links = 'zaji'
             all_article = Article.objects.filter(article_label_id=4)
             return render(request, 'zaji-list.html', {
@@ -140,4 +148,15 @@ class AboutMeView(View):
         links = 'aboutme'
         return render(request, 'aboutme.html', {
             'links': links,
+        })
+
+
+# 归档视图
+class TheArchiveView(View):
+    def get(self, request):
+        links = 'archive'
+        all_article = Article.objects.all().order_by('-add_time')
+        return render(request, 'archive-list.html', {
+            'links': links,
+            'all_article': all_article,
         })

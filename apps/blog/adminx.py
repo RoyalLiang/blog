@@ -1,9 +1,13 @@
 import xadmin
 from .models import *
+from mdeditor.widgets import MDEditorWidget
 
 
 class ArticleAdmin(object):
     list_display = ['title', 'add_time']
+    formfield_overrides = {
+        models.TextField: {'widget': MDEditorWidget}
+    }
 
 
 class LabelAdmin(object):
