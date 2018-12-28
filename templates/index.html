@@ -1,213 +1,154 @@
 <!DOCTYPE HTML>
 {% load staticfiles %}
-{#{% block custom_css %}{% endblock %}#}
 <html>
 	<head>
-		<title>{% block title %}首页{% endblock %}</title>
+		<title>{% block title %}首页-小小糊涂仙{% endblock %}</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <link rel="stylesheet" href="{% static 'css/code.css' %}" />
-        <link rel="stylesheet" href="{% static 'css/main.css' %}" />
-		<noscript><link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
+		<link rel="stylesheet" href="{% static 'css/main.css' %}" />
 	</head>
 	<body class="is-preload">
 
-		<!-- Wrapper -->
+		<!-- Content -->
+			<div id="content">
+				<div class="inner">
 
-			<div id="wrapper" class="fade-in">
-                {% block header %}
-				<!-- Intro -->
-					<div id="intro">
-						<h1>嗨,你好<br />
-						陌生人</h1>
-						<p>这里是Royal_Liang的主页</p>
-						<ul class="actions">
-							<li><a href="#header" class="button icon solo fa-arrow-down scrolly"></a></li>
-						</ul>
-					</div>
+					<!-- Post -->
+                {% block article %}
+                    {% for article in all_articles.object_list %}
+						<article class="box post post-excerpt">
+							<header>
+								<h2><a href="{% url 'blog:article_detail' article.id %}">{{ article.title }}</a></h2>
+								<p style="font-size: 18px;">{{ article.excerpt }}...</p>
+							</header>
+							<div class="info">
+								<span class="date"><span class="month">{{ article.add_time.month }}<span>y</span></span> <span class="day">{{ article.add_time.day }}</span><span class="year">, {{ article.add_time.year }}</span></span>
+								<!--
+									Note: You can change the number of list items in "stats" to whatever you want.
+								-->
+								<ul class="stats">
+									<li><a href="{% url 'blog:article_detail' article.id %}" class="icon fa-comment">{{ article.comment_set.all.count }}</a></li>
+									<li><a href="#" class="icon fa-heart">{{ article.click_nums }}</a></li>
+{#									<li><a href="#" class="icon fa-twitter">64</a></li>#}
+{#									<li><a href="#" class="icon fa-facebook">128</a></li>#}
+								</ul>
+							</div>
+{#							<a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>#}
+						</article>
+                    {% endfor %}
                 {% endblock %}
+					<!-- Pagination -->
+                    {% block page %}
+						<div class="pagination" style="margin-left: 50%;">
+							<!--<a href="#" class="button previous">Previous Page</a>-->
+                            {% if all_articles.has_previous %}
+                                <a href="?{{ all_articles.previous_page_number.querystring }}" class="button next">上一页</a>
+                            {% endif %}
+							<div class="pages">
+                                {% for page in all_articles.pages %}
+                                    {% if page %}
+                                        {% ifequal page all_articles.number %}
+                                            <a href="?{{ page.querystring }}" class="active">{{ page }}</a>
+                                        {% else %}
+                                            <a href="?{{ page.querystring }}">{{ page }}</a>
+                                        {% endifequal %}
+                                    {% else %}
+                                        <a href="#"><span>&hellip;</span></a>
+                                    {% endif %}
+                                {% endfor %}
+							</div>
+                            {% if all_articles.has_next %}
+                                <a href="?{{ all_articles.next_page_number.querystring }}" class="button next">下一页</a>
+                            {% endif %}
+{#							<a href="#" class="button next">Next Page</a>#}
 
-				<!-- Header -->
-					<header id="header">
-						<a href="{% url 'blog:share' %}" class="logo">分享本站</a>
-					</header>
+						</div>
+                    {% endblock %}
+
+				</div>
+			</div>
+
+		<!-- Sidebar -->
+			<div id="sidebar">
+
+				<!-- Logo -->
+					<h1 id="logo"><a href="#">RSS </a></h1>
 
 				<!-- Nav -->
 					<nav id="nav">
-						<ul class="links">
-                            {% block links %}
-							<li class="{% ifequal links 'index' %}active{% endifequal %}"><a href="{% url 'index' %}">首页</a></li>
-                            <li class="{% ifequal links 'label' %}active{% endifequal %}"><a href="{% url 'blog:label' %}">分类</a></li>
-                            <li class="{% ifequal links 'archive' %}active{% endifequal %}"><a href="{% url 'blog:archive' %}">归档</a></li>
-{#							<li class="{% ifequal links 'python' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='python' %}">Python</a></li>#}
-{#							<li class="{% ifequal links 'front' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='front' %}">前端</a></li>#}
-{#                            <li class="{% ifequal links 'database' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='database' %}">数据库</a></li>#}
-{#                            <li class="{% ifequal links 'zaji' %}active{% endifequal %}"><a href="{% url 'blog:article_label' label='zaji' %}">杂记</a></li>#}
-                            <li class="{% ifequal links 'aboutme' %}active{% endifequal %}"><a href="{% url 'blog:aboutme' %}">关于我</a></li>
-                            <li class="{% ifequal links 'read' %}active{% endifequal %}"><a>阅读页</a></li>
-                            {% endblock %}
+						<ul>
+							<li class="{% if links == 'index' %}current{% endif %}"><a href="{% url 'index' %}">首页</a></li>
+							<li {% if request.path|slice:'13' == '/blog/archive' %}class="current"{% endif %}><a href="{% url 'blog:archive' %}">归档</a></li>
+							<li {% if request.path|slice:'11' == '/blog/label' %}class="current"{% endif %}><a href="{% url 'blog:label' %}">分类</a></li>
+							<li {% if request.path|slice:'13' == '/blog/aboutme' %}class="current"{% endif %}><a href="{% url 'blog:aboutme' %}">关于我</a></li>
 						</ul>
-                        {% block bread %}
-						<ul class="icons">
-                            <li>当前位置:首页</li>
-						</ul>
-                        {% endblock %}
 					</nav>
-                    {% block body %}
 
-				<!-- Main -->
-					<div id="main">
-                    {% block list %}
-						<!-- Featured Post -->
-                            {% for article in articles %}
-							<article class="post featured">
-								<header class="major">
-									<span class="date">
-                                        <time datetime="{{ article.add_time }}">
-                                            {{ article.add_time|date:"Y.m.d   h:m" }}
-                                        </time>
-                                        <br>{{ article.click_nums }}浏览&nbsp;·&nbsp;{{ article.comment_set.all.count }}评论
-                                    </span>
+				<!-- Search -->
+					<section class="box search">
+                        {% csrf_token %}
+						<form method="get" action="{% url 'blog:search_list' %}">
+							<input id="search_keywords" type="text" class="text" name="search" placeholder="文章搜索" />
+						</form>
+					</section>
 
-									<h2><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}">{{ article.title }}</a></h2>
-{#                                    <p>所属分类:{{ article.article_label }}</p>#}
+				<!-- Text -->
+					<section class="box text-style1">
+						<div class="inner">
+							<p>
+								<strong>最新公共:</strong> 十年生死两茫茫，
+                                不思量，自难忘。
+							</p>
+						</div>
+					</section>
 
+				<!-- Recent Posts -->
+					<section class="box recent-posts">
+						<header>
+							<h2>最近文章</h2>
+						</header>
+						<ul>
+                            {% for article in latest_article %}
+							<li><a href="{% url 'blog:article_detail' article.id %}">{{ article.title }}</a></li>
+                            {% endfor %}
+						</ul>
+					</section>
 
-									<p>{{ article.excerpt }}</p>
-								</header>
-								<a href="#" class="image main"><img src="{{ MEDIA_URL }}{{ article.image }}" alt="" /></a>
-								<ul class="actions special">
-									<li><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="button large">
-                                        继续阅读
-                                    </a></li>
-								</ul>
-							</article>
-                        {% endfor %}
-                    {% endblock %}
-                    {% block all %}
-						<!-- Posts -->
-							<section class="posts">
-                                {% for article in all_articles.object_list %}
-								    <article>
-									<header>
-										<span class="date">
-                                            <h2><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}">{{ article.title }}</a></h2>
-                                            <time datetime="{{ article.add_time }}">
-                                            {{ article.add_time|date:"Y.m.d   h:m" }}
-{#                                                ·<img src="{% static 'images/eyes.png' %}">#}
-                                            </time>
-                                            &nbsp;·&nbsp;{{ article.click_nums }}浏览&nbsp;·&nbsp;{{ article.comment_set.all.count }}评论
-{#                                            所属分类:{{ article.article_label }}#}
-                                        </span>
-
-									</header>
-									<a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="image fit"><img src="{{ MEDIA_URL }}{{ article.image }}" alt="" /></a>
-									<p>{{ article.excerpt }}</p>
-									<ul class="actions special">
-										<li><a href="{% url 'blog:article_detail' kind='index' article_id=article.id %}" class="button">继续阅读</a></li>
-									</ul>
-								</article>
-								{% endfor %}
-							</section>
-                    {% endblock %}
-
-						<!-- Footer -->
-							<footer>
-								<div class="pagination">
-                                    {% if all_articles.has_previous %}
-                                        <li class="long"><a href="?{{ all_articles.previous_page_number.querystring }}">上一页</a></li>
-                                    {% endif %}
-
-                                    {% for page in all_articles.pages %}
-                                        {% if page %}
-                                            {% ifequal page all_articles.number %}
-                                                <a href="?{{ page.querystring }}" class="page active">{{ page }}</a>
-                                            {% else %}
-                                                <a href="?{{ page.querystring }}" class="page">{{ page }}</a>
-                                            {% endifequal %}
-                                        {% else %}
-                                            <a href="" class="none">...</a>
-                                        {% endif %}
-                                    {% endfor %}
-
-                                    {% if all_articles.has_next %}
-                                        <a href="?{{ all_articles.next_page_number.querystring }}" class="long">下一页</a>
-                                    {% endif %}
-								</div>
-							</footer>
-
-					</div>
-                    {% endblock %}
-
-
-				<!-- Footer -->
-                {% block footer %}
-{#					<footer id="footer">#}
-{#						<section>#}
-{#							<form method="post" action="#">#}
-{#								<div class="fields">#}
-{#									<div class="field">#}
-{#										<label for="name">Name</label>#}
-{#										<input type="text" name="name" id="name" />#}
-{#									</div>#}
-{#									<div class="field">#}
-{#										<label for="email">Email</label>#}
-{#										<input type="text" name="email" id="email" />#}
-{#									</div>#}
-{#									<div class="field">#}
-{#										<label for="message">Message</label>#}
-{#										<textarea name="message" id="message" rows="3"></textarea>#}
-{#									</div>#}
-{#								</div>#}
-{#								<ul class="actions">#}
-{#									<li><input type="submit" value="Send Message" /></li>#}
-{#								</ul>#}
-{#							</form>#}
-{#						</section>#}
-{#						<section class="split contact">#}
-{#							<section class="alt">#}
-{#								<h3>Address</h3>#}
-{#								<p>1234 Somewhere Road #87257<br />#}
-{#								Nashville, TN 00000-0000</p>#}
-{#							</section>#}
-{#							<section>#}
-{#								<h3>Phone</h3>#}
-{#								<p><a href="#">(000) 000-0000</a></p>#}
-{#							</section>#}
-{#							<section>#}
-{#								<h3>Email</h3>#}
-{#								<p><a href="#">info@untitled.tld</a></p>#}
-{#							</section>#}
-{#							<section>#}
-{#								<h3>Social</h3>#}
-{#								<ul class="icons alt">#}
-{#									<li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>#}
-{#									<li><a href="#" class="icon alt fa-facebook"><span class="label">Facebook</span></a></li>#}
-{#									<li><a href="#" class="icon alt fa-instagram"><span class="label">Instagram</span></a></li>#}
-{#									<li><a href="#" class="icon alt fa-github"><span class="label">GitHub</span></a></li>#}
-{##}
-{#								</ul>#}
-{#							</section>#}
-{#						</section>#}
-{#					</footer>#}
-                {% endblock %}
+				<!-- Recent Comments -->
+					<section class="box recent-comments">
+						<header>
+							<h2>最新评论</h2>
+						</header>
+						<ul>
+                            {% for comment in latest_comment %}
+							<li>{{ comment.name }} <a href="{% url 'blog:article_detail' comment.comment_article.id %}">{{ comment.message }}</a></li>
+                            {% endfor %}
+						</ul>
+					</section>
 
 				<!-- Copyright -->
-					<div id="copyright">
-						<ul><li>&copy; 人走茶未凉</li></ul>
-					</div>
+					<ul id="copyright">
+						<li>&copy; 小小糊涂仙的博客</li>
+                        <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
 
 			</div>
 
 		<!-- Scripts -->
 			<script src="{% static 'js/jquery.min.js' %}"></script>
-			<script src="{% static 'js/jquery.scrollex.min.js' %}"></script>
-			<script src="{% static 'js/jquery.scrolly.min.js' %}"></script>
 			<script src="{% static 'js/browser.min.js' %}"></script>
 			<script src="{% static 'js/breakpoints.min.js' %}"></script>
 			<script src="{% static 'js/util.js' %}"></script>
 			<script src="{% static 'js/main.js' %}"></script>
-        {% block js %}{% endblock %}
-
+{#            <script>#}
+{#                function search_click(){#}
+{#                    let keywords = $('#search_keywords').val();#}
+{#                    if(keywords === ""){#}
+{#                        return#}
+{#                    }#}
+{#                    #}
+{#                }#}
+{#            </script>#}
+            {% block js %}{% endblock %}
 	</body>
 </html>

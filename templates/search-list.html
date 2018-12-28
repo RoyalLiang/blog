@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+{% block title %}搜索列表-小小糊涂仙{% endblock %}
+{% block article %}
+
+    <article class="box post post-excerpt">
+    {% for search in all_search %}
+
+        <div class="info">
+            <span class="date"><span class="month">文章<span>y</span></span> <span class="day">{{ all_search.count }}</span><span class="year"></span></span>
+
+        </div>
+        <p style="font-size: 20px"><a style="text-decoration : none;" href="{% url 'blog:article_detail' search.id %}">{{ search.title }}</a></p>
+
+    {% endfor %}
+
+    </article>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block title %}分类-小小糊涂仙{% endblock %}
+{% block article %}
+    {% for key,value in all_label_article.items %}
+    <article class="box post post-excerpt">
+        <br><br>
+        {% for article in value %}
+            <div class="info">
+                <span class="date"><span class="month">{{ key }}<span></span></span> <span class="day">{{ value.count }}</span><span class="year"></span></span>
+
+            </div>
+            <p style="font-size: 24px"><a style="text-decoration: none;" href="{% url 'blog:article_detail' article.id %}">{{ article }}</a></p>
+        {% endfor %}
+    <br>
+    </article>
+    {% endfor %}
+{% endblock %}
+{% block page %}{% endblock %}

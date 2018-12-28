@@ -1,0 +1,37 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block title %}归档-小小糊涂仙{% endblock %}
+{% block article %}
+    {% regroup all_article by add_time.year as article_by_year %}
+        {% for year in article_by_year %}
+        {% regroup year.list by add_time.month as month_post_group %}
+            {% for month in month_post_group %}
+            {% regroup month.list by add_time.day as article_day_group %}
+                {% for day in article_day_group %}
+                <article class="box post post-excerpt">
+
+                    <div class="info">
+                        <span class="date"><span class="month">{{ month.grouper }}</span>
+
+                            <span class="day">{{ day.grouper }}</span><span class="year"></span></span>
+                        <!--
+                            Note: You can change the number of list items in "stats" to whatever you want.
+                        -->
+                            <ul class="stats">
+                                <li><a>{{ year.grouper }}</a></li>
+                            </ul>
+                    </div>
+                {#        <a href="#" class="image featured"><img src="images/pic01.jpg" alt="" /></a>#}
+                    {% for article in day.list %}
+
+                        <header>
+                            <h2><a href="{% url 'blog:article_detail' article.id %}">{{ article.title }}</a></h2>
+                            <p style="font-size: 18px;">{{ article.excerpt }}...</p>
+                        </header>
+                    {% endfor %}
+                </article>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+{% endblock %}
+{% block page %}{% endblock %}
